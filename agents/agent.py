@@ -1,9 +1,16 @@
+import os
+import pickle
 import numpy as np
+from datetime import datetime
+from agents.core import BaseAgent
 
 
-class Agent():
+class QLearningAgent(BaseAgent):
 
-    def __init__(self, agent_info: dict):
+    def __init__(self):
+        pass
+
+    def agent_init(self, agent_info: dict):
         self.num_states = agent_info["num_states"]
         self.num_actions = agent_info["num_actions"]
         self.gamma = agent_info.get("discount", 0.95)
@@ -78,3 +85,14 @@ class Agent():
             values = self._q_values[state]
             action = self.argmax(values)
         return action
+
+    def agent_save(self):
+        agents_folder = 'saves/agent_values'
+        if not os.path.exists(agents_folder):
+            os.mkdir(agents_folder)
+        now = datetime.now().strftime("%m%d%Y_%H%M%S")
+        results_path = os.path.join(agents_folder,
+                                    f'QLearningAgent_{now}.pickle')
+        results = {'q_values': self._q_values}
+        with open(results_path, 'wb') as handle:
+            pickle.dump(results, handle, protocol=pickle.HIGHEST_PROTOCOL)

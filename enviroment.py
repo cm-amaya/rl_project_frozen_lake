@@ -14,7 +14,7 @@ class Enviroment:
         if path:
             self._map_path = path
         else:
-            map_folder = 'maps'
+            map_folder = 'saves/maps'
             if not os.path.exists(map_folder):
                 os.mkdir(map_folder)
             self._map_path = os.path.join(map_folder, 'base.pkl')
