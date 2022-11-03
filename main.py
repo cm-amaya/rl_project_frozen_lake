@@ -3,9 +3,10 @@ import gym
 import pickle
 import argparse
 from datetime import datetime
-from agents.core import BaseAgent
-from agents.agent import QLearningAgent
-from enviroment import Enviroment
+from project.agents.core import BaseAgent
+from project.agents.q_learning_agent import QLearningAgent
+from project.agents.dyna_q_agent import DynaQAgent
+from project.enviroment import Enviroment
 
 
 parser = argparse.ArgumentParser()
@@ -56,7 +57,10 @@ def main():
     if not os.path.exists(saves_folder):
         os.mkdir(saves_folder)
     map = Enviroment()
-    agent = QLearningAgent()
+    if agent_type == "QLearning":
+        agent = QLearningAgent()
+    else:
+        agent = DynaQAgent()
     agent_info = {"num_actions": 4,
                   "num_states": 16,
                   "epsilon": 0.1,

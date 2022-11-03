@@ -2,7 +2,7 @@ import os
 import pickle
 import numpy as np
 from datetime import datetime
-from agents.core import BaseAgent
+from project.agents.core import BaseAgent
 
 
 class QLearningAgent(BaseAgent):
