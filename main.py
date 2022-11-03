@@ -13,7 +13,7 @@ from project.enviroment import Enviroment
 parser = argparse.ArgumentParser()
 parser.add_argument('--episodes', type=int, default=200)
 parser.add_argument('--agent', type=str, default="QLearning")
-parser.add_argument('--render_steps', type=int, default=50)
+parser.add_argument('--render', type=bool, default=False)
 
 
 def save_results(agent_type, q_values, steps,n_rewards,n_state_visits, n_episodes):
@@ -40,12 +40,12 @@ def episode(agent: BaseAgent, env: gym.Env, render: bool = False):
         env.render()
     terminated = False
     steps = 0
-    rewards = 0
+    rewards = 0.0
     state_visits = np.zeros(48)
     while not terminated:
         steps += 1
         observation, reward, terminated, truncated, info = env.step(action)
-        rewards +=reward
+        rewards += reward
         state_visits[observation] +=1 
         if terminated or truncated:
             agent.agent_end(reward)
@@ -59,7 +59,7 @@ def main():
     args = parser.parse_args()
     agent_type = args.agent
     episodes = args.episodes
-    render_steps = args.render_steps
+    render = args.render
     saves_folder = 'saves'
     if not os.path.exists(saves_folder):
         os.mkdir(saves_folder)
@@ -79,8 +79,7 @@ def main():
     n_rewards = []
     n_state_visits = []
     for i in range(episodes):
-        render_bool = i % render_steps
-        steps, rewards, state_visits = episode(agent, map.env, render_bool)
+        steps, rewards, state_visits = episode(agent, map.env, render)
         print("Episode {} finished after {} steps".format(i+1, steps+1))
         n_steps.append(steps)
         n_rewards.append(rewards)
